@@ -8,7 +8,7 @@ from py2neo import Graph
 
 # MQTT setup
 mqtt_client = mqtt.Client()
-mqtt_client.connect("mqtt", 1883, 60)  # Using internal Docker network, so port is still 1883
+mqtt_client.connect("mqtt", 1883, 60) 
 
 # MySQL setup
 mysql_conn = mysql.connector.connect(
@@ -20,11 +20,11 @@ mysql_conn = mysql.connector.connect(
 mysql_cursor = mysql_conn.cursor()
 
 # MongoDB setup
-mongo_client = MongoClient("mongodb://mongo:27017/")  # Using internal Docker network
+mongo_client = MongoClient("mongodb://mongo:27017/")  
 mongo_db = mongo_client["iot_data"]
 
 # Neo4j setup
-neo4j_graph = Graph("bolt://neo4j:7687", auth=("neo4j", "password"))  # Using internal Docker network
+neo4j_graph = Graph("bolt://neo4j:7687", auth=("neo4j", "password"))  
 
 def generate_data():
     soil_moisture = random.uniform(0, 100)
@@ -50,7 +50,7 @@ def store_mongodb_data(data_type, value):
 def store_neo4j_data(data_type, value):
     neo4j_graph.run(f"CREATE (d:{data_type} {{value: $value, timestamp: timestamp()}})", value=value)
 
-# Ensure tables exist in MySQL
+
 mysql_cursor.execute("""
 CREATE TABLE IF NOT EXISTS soil_moisture (
     id INT AUTO_INCREMENT PRIMARY KEY,
