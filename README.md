@@ -12,13 +12,10 @@ A distributed system for collecting and storing IoT sensor data across multiple 
   - Light Levels
   - Nutrient Levels
 - MQTT-based publish/subscribe architecture
-- Secure communication with TLS support
 - Multi-database storage strategy:
   - MySQL for soil moisture and pH data
   - MongoDB for temperature and humidity data
   - Neo4j for light and nutrient levels
-- Configurable data generation intervals
-- Interactive control for data generation
 
 ## Prerequisites
 
@@ -79,33 +76,31 @@ docker run -d \
 docker ps | grep iot_neo4j
 ```
 
-### Mosquitto MQTT Broker Container
-```bash
-# Create necessary directories
-mkdir -p mosquitto/config mosquitto/data mosquitto/log
+### HiveMQ MQTT Broker Setup
 
-# Create Mosquitto configuration file
-cat > mosquitto/config/mosquitto.conf << EOL
-persistence true
-persistence_location /mosquitto/data/
-log_dest file /mosquitto/log/mosquitto.log
-listener 1883
-allow_anonymous false
-password_file /mosquitto/config/mosquitto.passwd
-EOL
+This project uses the free HiveMQ Cloud service for MQTT communication. Follow these steps to set up your MQTT broker:
 
-# Create and run Mosquitto container
-docker run -d \
-  --name iot_mqtt \
-  -p 1883:1883 -p 8883:8883 \
-  -v $(pwd)/mosquitto/config:/mosquitto/config \
-  -v $(pwd)/mosquitto/data:/mosquitto/data \
-  -v $(pwd)/mosquitto/log:/mosquitto/log \
-  eclipse-mosquitto:latest
+1. **Create an Account on HiveMQ Cloud**:
+   - Visit [HiveMQ Cloud](https://www.hivemq.com/mqtt-cloud-broker/) and sign up for a free account.
+   - Log in to your HiveMQ dashboard and create a new MQTT broker instance.
 
-# Verify Mosquitto container is running
-docker ps | grep iot_mqtt
-```
+2. **Obtain Connection Details**:
+   - After creating the broker instance, note down the following details from your HiveMQ dashboard:
+     - **Broker URL**
+     - **Port** (Use `8883` for secure communication)
+     - **Username** and **Password**
+
+3. **Configure the `.env` File**:
+   - Update the `.env` file in the project root with your HiveMQ credentials:
+     ```env
+     MQTT_BROKER_URL=<your_broker_url>
+     MQTT_PORT=8883
+     MQTT_USERNAME=<your_username>
+     MQTT_PASSWORD=<your_password>
+     ```
+
+4. **Test the Connection**:
+   - Use the `publisher.py` and `subscriber.py` scripts in this project to publish and subscribe to topics to ensure your HiveMQ broker is working correctly.
 
 ### Container Management
 ```bash
