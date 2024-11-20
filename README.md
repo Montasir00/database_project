@@ -29,8 +29,8 @@ A distributed system for collecting and storing IoT sensor data across multiple 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/iot-sensor-data-collection.git
-cd iot-sensor-data-collection
+[git clone https://github.com/yourusername/iot-sensor-data-collection.git
+cd iot-sensor-data-collection](https://github.com/Montasir00/database_project.git)
 ```
 
 2. Install required packages:
